@@ -33,7 +33,7 @@ COPY ./src ./src
 #            at runtime instead of copying directly into the image.
 #            We copy them here for simplicity in this example.
 COPY ./models ./models
-COPY ./data ./data 
+#COPY ./data ./data 
 # If your app needs access to raw data at runtime
 
 # Create logs directory (ensure it exists for the logger)
