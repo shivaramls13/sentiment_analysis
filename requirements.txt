@@ -1,0 +1,11 @@
+pandas
+scikit-learn
+mlflow
+joblib
+fastapi
+uvicorn[standard]
+python-dotenv
+PyYAML
+pytest
+flake8
+black

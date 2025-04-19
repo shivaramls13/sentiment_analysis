@@ -1,0 +1,34 @@
+# .dockerignore
+
+# Python virtual environment
+venv/
+
+# Git directory
+.git/
+
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/ # If using ruff
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# IDE configuration files
+.idea/
+.vscode/
+
+# Logs and potentially large data/model files if managed externally
+# We are copying models/ and data/ FOR NOW, but often you'd ignore them
+# and fetch them at runtime or mount them as volumes if they are large.
+# data/ # Uncomment if data is very large and mounted/fetched separately
+# models/ # Uncomment if models are very large and mounted/fetched separately
+logs/ # Logs generated locally shouldn't be in the image
+*.log
+
+# Notebooks (not needed for production runtime)
+notebooks/
