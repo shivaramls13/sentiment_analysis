@@ -1,7 +1,7 @@
 # tests/test_predict.py
 import pytest
 from pathlib import Path
-import joblib # To potentially inspect the loaded model if needed
+import joblib  # To potentially inspect the loaded model if needed
 
 # Assuming tests are run from the project root directory
 # If not, adjust paths accordingly or use fixtures
@@ -15,10 +15,13 @@ from sentiment_analysis_service.config import MODEL_PATH, MODEL_FILE_NAME, MODEL
 
 # --- Tests for load_model ---
 
+
 def test_load_model_success():
     """Test if the model loads successfully from the correct path."""
     # Ensure the model file actually exists before running the test
-    assert MODEL_PATH.exists(), f"Model file not found at {MODEL_PATH}. Run the notebook first."
+    assert (
+        MODEL_PATH.exists()
+    ), f"Model file not found at {MODEL_PATH}. Run the notebook first."
 
     # Reset the internal state if needed (or rely on lazy loading logic)
     # Forcing reload requires accessing the private variable or a dedicated reset function
@@ -27,8 +30,9 @@ def test_load_model_success():
     pipeline = load_model()
     assert pipeline is not None
     # Check if it looks like a scikit-learn pipeline (basic check)
-    assert hasattr(pipeline, 'steps')
-    assert hasattr(pipeline, 'predict')
+    assert hasattr(pipeline, "steps")
+    assert hasattr(pipeline, "predict")
+
 
 def test_load_model_file_not_found(tmp_path):
     """Test FileNotFoundError when model path is incorrect."""
@@ -36,6 +40,7 @@ def test_load_model_file_not_found(tmp_path):
     non_existent_path = tmp_path / "non_existent_model.joblib"
     with pytest.raises(FileNotFoundError):
         load_model(model_path=non_existent_path)
+
 
 # --- Tests for predict function ---
 
@@ -45,7 +50,8 @@ SAMPLE_INPUTS = [
     "Very disappointed with the quality.",
     "Works okay, but not great.",
 ]
-EXPECTED_KEYS = {"input_text", "sentiment"} # Expected keys in the output dict
+EXPECTED_KEYS = {"input_text", "sentiment"}  # Expected keys in the output dict
+
 
 def test_predict_valid_input():
     """Test prediction with a valid batch of text."""
@@ -64,18 +70,20 @@ def test_predict_valid_input():
         # Check if sentiment is one of the expected classes (adjust if your model has different ones)
         assert result["sentiment"] in ["positive", "negative", "neutral"]
 
+
 def test_predict_empty_list():
     """Test prediction with an empty list."""
     predictions = predict([])
     assert predictions == []
 
+
 def test_predict_mixed_types_input():
     """Test prediction with inputs including non-strings."""
     mixed_inputs = [
         "Good stuff!",
-        12345, # Invalid type
+        12345,  # Invalid type
         "This is bad.",
-        None   # Invalid type
+        None,  # Invalid type
     ]
     expected_count = len(mixed_inputs)
     predictions = predict(mixed_inputs)
@@ -85,9 +93,17 @@ def test_predict_mixed_types_input():
 
     # Check that valid inputs got predictions and invalid ones were handled (based on preprocess)
     assert predictions[0]["sentiment"] in ["positive", "negative", "neutral"]
-    assert predictions[1]["sentiment"] in ["positive", "negative", "neutral"] # Preprocess converts int to "" -> likely neutral/neg prediction
+    assert predictions[1]["sentiment"] in [
+        "positive",
+        "negative",
+        "neutral",
+    ]  # Preprocess converts int to "" -> likely neutral/neg prediction
     assert predictions[2]["sentiment"] in ["positive", "negative", "neutral"]
-    assert predictions[3]["sentiment"] in ["positive", "negative", "neutral"] # Preprocess converts None to "" -> likely neutral/neg prediction
+    assert predictions[3]["sentiment"] in [
+        "positive",
+        "negative",
+        "neutral",
+    ]  # Preprocess converts None to "" -> likely neutral/neg prediction
 
 
 def test_predict_single_item_list():
@@ -98,6 +114,7 @@ def test_predict_single_item_list():
     assert len(predictions) == 1
     assert predictions[0]["input_text"] == single_input[0]
     assert predictions[0]["sentiment"] in ["positive", "negative", "neutral"]
+
 
 # Note: Testing for specific prediction outputs (e.g., assert predict("good")[0]['sentiment'] == 'positive')
 # can be brittle if the model changes slightly during retraining. It's often better to test the
