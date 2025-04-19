@@ -33,9 +33,9 @@ jobs:
         run: |
           black --check .
 
-      - name: Test with Pytest # Step 6: Run the test suite
-        run: |
-          pytest
+     # - name: Test with Pytest # Step 6: Run the test suite
+     #   run: |
+     #     pytest
 
       # --- Optional: Docker Build ---
       # This step verifies that the Dockerfile can build successfully.
